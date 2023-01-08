@@ -33,6 +33,7 @@
           nativeBuildInputs = [
             pkgs.zlib
             pkgs.xz
+            pkgs.just
             pkgs.cabal-install
             pkgs.haskell.packages.ghc943.haskell-language-server
             pkgs.haskell.compiler.ghc943
