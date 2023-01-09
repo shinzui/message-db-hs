@@ -51,9 +51,14 @@ library
   default-language: GHC2021
 
 test-suite message-db-test
-  import:           common-options
-  default-language: GHC2021
-  type:             exitcode-stdio-1.0
-  hs-source-dirs:   test
-  main-is:          Main.hs
-  build-depends:    message-db
+  import:              common-options
+  default-language:    GHC2021
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Main.hs
+  build-depends:
+    , message-db
+    , tasty              ^>=1.4
+    , tasty-autocollect  ^>=0.4
+    , tasty-hedgehog     ^>=1.4
+    , tasty-hspec        ^>=1.2
