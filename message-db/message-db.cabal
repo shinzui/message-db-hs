@@ -26,11 +26,11 @@ library
         -Wall -Wcompat -Widentities -Wincomplete-uni-patterns
         -Wincomplete-record-updates -Wredundant-constraints
         -fhide-source-paths -Wmissing-export-lists -Wpartial-fields
-        -Wmissing-deriving-strategies
+        -Wmissing-deriving-strategies -threaded
 
     build-depends:
-        base ^>=4.17.0.0,
         aeson ^>=2.1.0.0,
+        base ^>=4.17.0.0,
         generic-lens ^>=2.2.1.0,
         hasql ^>=1.6.3,
         lens ^>=5.2,
@@ -47,6 +47,7 @@ test-suite message-db-test
         Generator
         Generators.Aeson
         Generators.Ranges
+        MessageDb.StreamSpec
 
     default-language:   GHC2021
     default-extensions:
@@ -57,11 +58,11 @@ test-suite message-db-test
         -Wall -Wcompat -Widentities -Wincomplete-uni-patterns
         -Wincomplete-record-updates -Wredundant-constraints
         -fhide-source-paths -Wmissing-export-lists -Wpartial-fields
-        -Wmissing-deriving-strategies
+        -Wmissing-deriving-strategies -threaded
 
     build-depends:
-        base ^>=4.17.0.0,
         aeson ^>=2.1.0,
+        base ^>=4.17.0.0,
         hedgehog,
         message-db,
         scientific ^>=0.3.7,
@@ -69,4 +70,5 @@ test-suite message-db-test
         tasty-autocollect ^>=0.4,
         tasty-hedgehog ^>=1.4,
         tasty-hspec ^>=1.2,
+        text ^>=2.0.1,
         vector ^>=0.13.0
