@@ -2,6 +2,8 @@ module MessageDb.Db.Encoders
   ( newMessageEncoder,
     streamValue,
     streamCategoryValue,
+    streamPositionValue,
+    streamEncoder,
   )
 where
 
@@ -26,3 +28,9 @@ streamValue = toText >$< E.text
 
 streamCategoryValue :: E.Value StreamCategory
 streamCategoryValue = streamCategoryToText >$< E.text
+
+streamPositionValue :: E.Value StreamPosition
+streamPositionValue = (coerce <$> unStreamPosition) >$< E.int8
+
+streamEncoder :: E.Params Stream
+streamEncoder = E.param (E.nonNullable streamValue)

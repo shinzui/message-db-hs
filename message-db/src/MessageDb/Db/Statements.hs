@@ -3,6 +3,7 @@ module MessageDb.Db.Statements
     getStreamMessages,
     getCategoryMessages,
     writeStreamMessage,
+    getStreamVersion,
   )
 where
 
@@ -105,3 +106,11 @@ writeStreamMessage = Statement sql encoder decoder True
     sql = "select write_message($1::varchar,$2,$3,$4,$5,$6)"
     encoder = E.newMessageEncoder
     decoder = D.singleRow (D.column (D.nonNullable D.streamPositionDecoder))
+
+-- [http://docs.eventide-project.org/user-guide/message-db/server-functions.html#get-stream-version-from-a-stream]
+getStreamVersion :: Statement Stream (Maybe StreamPosition)
+getStreamVersion = Statement sql encoder decoder True
+  where
+    sql = "SELECT * FROM stream_version($1)"
+    encoder = E.streamEncoder
+    decoder = D.singleRow (D.column (D.nullable D.streamPositionDecoder))
