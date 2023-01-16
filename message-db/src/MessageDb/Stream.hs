@@ -1,4 +1,12 @@
-module MessageDb.Stream (Stream (..), parse, toText) where
+module MessageDb.Stream
+  ( Stream (..),
+    StreamCategory,
+    Identifier,
+    parse,
+    toText,
+    streamCategoryToText,
+  )
+where
 
 import Data.Generics.Labels ()
 import Data.Text (Text, intercalate, split)
@@ -17,6 +25,9 @@ data Stream = Stream
     identifier :: !Identifier
   }
   deriving stock (Eq, Ord, Show, Generic)
+
+streamCategoryToText :: StreamCategory -> Text
+streamCategoryToText = unStreamCategory
 
 toText :: Stream -> Text
 toText (Stream c i) = unStreamCategory c <> "-" <> unIdentifier i

@@ -1,4 +1,9 @@
-module MessageDb.Db.Encoders (newMessageEncoder, streamValue) where
+module MessageDb.Db.Encoders
+  ( newMessageEncoder,
+    streamValue,
+    streamCategoryValue,
+  )
+where
 
 import Control.Lens
 import Data.Coerce (coerce)
@@ -18,3 +23,6 @@ newMessageEncoder =
 
 streamValue :: E.Value Stream
 streamValue = toText >$< E.text
+
+streamCategoryValue :: E.Value StreamCategory
+streamCategoryValue = streamCategoryToText >$< E.text

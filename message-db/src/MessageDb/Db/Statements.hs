@@ -1,6 +1,7 @@
 module MessageDb.Db.Statements
   ( getLastStreamMessage,
     getStreamMessages,
+    getCategoryMessages,
   )
 where
 
@@ -18,6 +19,7 @@ import MessageDb.Db.Decoders qualified as D
 import MessageDb.Db.Encoders qualified as E
 import MessageDb.Message
 import MessageDb.Stream
+import Numeric.Natural (Natural)
 
 data BatchSize = Unlimited | Limit Word64
   deriving stock (Eq, Show)
@@ -27,8 +29,6 @@ batchSizeValue = batchSizeToInt64 >$< E.int8
   where
     batchSizeToInt64 Unlimited = -1
     batchSizeToInt64 (Limit n) = fromIntegral n
-
-type QueryCondition = Text
 
 data GetStreamMessagesQuery = GetStreamMessagesQuery
   { stream :: !Stream,
@@ -60,3 +60,39 @@ getLastStreamMessage = Statement sql encoder decoder True
     sql = "select id::uuid, stream_name, type, position, global_position, data, metadata, time from get_last_stream_message($1)"
     encoder = E.param (E.nonNullable E.streamValue)
     decoder = D.rowMaybe D.messageDecoder
+
+type QueryCondition = Text
+
+data ConsumerGroup = ConsumerGroup
+  { groupMember :: !Natural,
+    groupSize :: !Natural
+  }
+  deriving stock (Eq, Generic, Show)
+
+data GetCategoryMessagesQuery = GetCategoryMessagesQuery
+  { streamCategory :: !StreamCategory,
+    globalPositionStart :: !(Maybe GlobalPosition),
+    batchSize :: !(Maybe BatchSize),
+    correlation :: !(Maybe StreamCategory),
+    consumerGroup :: !(Maybe ConsumerGroup),
+    condition :: !(Maybe QueryCondition)
+  }
+  deriving stock (Eq, Generic, Show)
+
+getCategoryMessagesQueryEncoder :: E.Params GetCategoryMessagesQuery
+getCategoryMessagesQueryEncoder =
+  ((\e -> e ^. #streamCategory) >$< E.param (E.nonNullable E.streamCategoryValue))
+    <> ((fmap coerce . globalPositionStart) >$< E.param (E.nullable E.int8))
+    <> (view #batchSize >$< E.param (E.nullable batchSizeValue))
+    <> (view #correlation >$< E.param (E.nullable E.streamCategoryValue))
+    <> ((fmap (fromIntegral . groupMember) . view #consumerGroup) >$< E.param (E.nullable E.int4))
+    <> ((fmap (fromIntegral . groupMember) . view #consumerGroup) >$< E.param (E.nullable E.int4))
+    <> (view #condition >$< E.param (E.nullable E.text))
+
+-- [http://docs.eventide-project.org/user-guide/message-db/server-functions.html#get-messages-from-a-category]
+getCategoryMessages :: Statement GetCategoryMessagesQuery (Vector Message)
+getCategoryMessages = Statement sql encoder decoder True
+  where
+    sql = "select id::uuid, stream_name, type, position, global_position, data, metadata, time from get_category_messages($1,$2,$3,$4,$5,$6,$7)"
+    encoder = getCategoryMessagesQueryEncoder
+    decoder = D.rowVector D.messageDecoder
