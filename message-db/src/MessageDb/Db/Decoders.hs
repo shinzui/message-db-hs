@@ -1,6 +1,7 @@
 module MessageDb.Db.Decoders
   ( messageDecoder,
     streamDecoder,
+    streamPositionDecoder,
   )
 where
 
@@ -22,3 +23,6 @@ messageDecoder =
 
 streamDecoder :: D.Value Stream
 streamDecoder = D.refine parse D.text
+
+streamPositionDecoder :: D.Value StreamPosition
+streamPositionDecoder = StreamPosition <$> D.int8

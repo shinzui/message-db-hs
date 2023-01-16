@@ -2,6 +2,7 @@ module MessageDb.Db.Statements
   ( getLastStreamMessage,
     getStreamMessages,
     getCategoryMessages,
+    writeStreamMessage,
   )
 where
 
@@ -96,3 +97,11 @@ getCategoryMessages = Statement sql encoder decoder True
     sql = "select id::uuid, stream_name, type, position, global_position, data, metadata, time from get_category_messages($1,$2,$3,$4,$5,$6,$7)"
     encoder = getCategoryMessagesQueryEncoder
     decoder = D.rowVector D.messageDecoder
+
+-- [http://docs.eventide-project.org/user-guide/message-db/server-functions.html#write-a-message]
+writeStreamMessage :: Statement NewMessage StreamPosition
+writeStreamMessage = Statement sql encoder decoder True
+  where
+    sql = "select write_message($1::varchar,$2,$3,$4,$5,$6)"
+    encoder = E.newMessageEncoder
+    decoder = D.singleRow (D.column (D.nonNullable D.streamPositionDecoder))
