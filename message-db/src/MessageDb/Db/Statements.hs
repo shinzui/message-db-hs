@@ -4,6 +4,8 @@ module MessageDb.Db.Statements
     getCategoryMessages,
     writeStreamMessage,
     getStreamVersion,
+    GetStreamMessagesQuery (..),
+    GetCategoryMessagesQuery (..),
   )
 where
 
