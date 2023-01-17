@@ -14,7 +14,8 @@ category:        Database
 build-type:      Simple
 extra-doc-files: CHANGELOG.md
 
--- extra-source-files:
+extra-source-files:
+ database/**/*.sql
 
 common warnings
   ghc-options:
@@ -25,12 +26,15 @@ common warnings
 
 library
   import:           warnings
-  exposed-modules:  MyLib
+  exposed-modules:  
+   MessageDb.Migration.V130Migration
+   MessageDb.Migration.Migrate
 
   -- other-modules:
   -- other-extensions:
   build-depends:
     , base               ^>=4.17.0.0
+    , bytestring         ^>=0.11
     , file-embed         ^>=0.0.15
     , filepath           ^>=1.4.2
     , hasql              ^>=1.6.3
