@@ -49,6 +49,7 @@ test-suite message-db-test
   main-is:            Main.hs
   hs-source-dirs:     test
   other-modules:
+    Database.Postgres.Temp.Tasty
     Generator
     Generators.Aeson
     Generators.Ranges
@@ -70,12 +71,20 @@ test-suite message-db-test
   build-depends:
     , aeson              ^>=2.1.0
     , base               ^>=4.17.0.0
+    , bytestring         ^>=0.11
+    , hasql              ^>=1.6.3
+    , hasql-pool         ^>=0.8
+    , hasql-transaction  ^>=1.0.1
     , hedgehog
+
+    , filepath           ^>=1.4.2
     , message-db
+    , postgres-options
     , scientific         ^>=0.3.7
     , tasty              ^>=1.4
     , tasty-autocollect  ^>=0.4
     , tasty-hedgehog     ^>=1.4
     , tasty-hspec        ^>=1.2
     , text               ^>=2.0.1
+    , tmp-postgres       ^>=1.34
     , vector             ^>=0.13.0

@@ -1,4 +1,4 @@
-module Generator where
+module Generator (streamGen) where
 
 import Hedgehog
 import MessageDb.Stream
