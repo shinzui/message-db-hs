@@ -54,6 +54,8 @@ test-suite message-db-test
     Generators.Aeson
     Generators.Ranges
     MessageDb.StreamSpec
+    MessageDb.Db.DbSpec
+    MessageDb.Db.TastySetup
 
   default-language:   GHC2021
   default-extensions:
@@ -76,7 +78,7 @@ test-suite message-db-test
     , hasql-pool         ^>=0.8
     , hasql-transaction  ^>=1.0.1
     , hedgehog
-
+    , message-db-migration 
     , filepath           ^>=1.4.2
     , message-db
     , postgres-options
