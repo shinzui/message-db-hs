@@ -7,12 +7,15 @@ module MessageDb.Message
     MessageMetadata (..),
     StreamPosition (..),
     GlobalPosition (..),
+    represents,
   )
 where
 
+import Control.Lens
 import Data.Aeson (Value)
 import Data.Generics.Labels ()
 import Data.Int (Int64)
+import Data.Maybe (isNothing)
 import Data.Text (Text)
 import Data.Time (UTCTime)
 import Data.UUID (UUID)
@@ -72,8 +75,6 @@ data NewMessage = NewMessage
     stream :: !Stream,
     -- | The type of the message
     messageType :: !MessageType,
-    -- | The ordinal position of the message in the entire message store. Global position may have gaps.
-    globalPosition :: !GlobalPosition,
     -- | Message payload
     messageData :: !MessageData,
     -- | Message metadata
@@ -82,3 +83,12 @@ data NewMessage = NewMessage
     expectedPosition :: !(Maybe StreamPosition)
   }
   deriving stock (Eq, Generic, Show)
+
+represents :: Message -> NewMessage -> Bool
+represents msg newMsg =
+  newMsg ^. #stream == msg ^. #stream
+    && newMsg ^. #messageId == msg ^. #messageId
+    && newMsg ^. #messageType == msg ^. #messageType
+    && newMsg ^. #messageData == msg ^. #messageData
+    && newMsg ^. #messageMetadata == msg ^. #messageMetadata
+    && (isNothing (newMsg ^. #expectedPosition) || (newMsg ^. #expectedPosition ^? _Just == Just (msg ^. #position)))

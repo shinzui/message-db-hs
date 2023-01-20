@@ -26,6 +26,9 @@ data Stream = Stream
   }
   deriving stock (Eq, Ord, Show, Generic)
 
+mkStream :: StreamCategory -> Identifier -> Stream
+mkStream c i = Stream {category = c, identifier = i}
+
 streamCategoryToText :: StreamCategory -> Text
 streamCategoryToText = unStreamCategory
 

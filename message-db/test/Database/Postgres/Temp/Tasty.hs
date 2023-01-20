@@ -34,7 +34,7 @@ withTmpPostgresPool ::
 withTmpPostgresPool cachePath connOpts migrate t =
   withResource start stop f -- acquire a temp postgres DB
   where
-    f db = withResource (db >>= \db' -> P.acquire 3 (Just 60) (connectionString connOpts db')) P.release t
+    f db = withResource (db >>= \db' -> P.acquire 10 (Just 60) (connectionString connOpts db')) P.release t
     start =
       either throwIO pure =<< do
         migratedConfig <-

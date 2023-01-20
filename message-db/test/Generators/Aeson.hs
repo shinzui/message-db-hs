@@ -3,12 +3,13 @@
 {-
 This module is taken from [haskell-hedgehog-gen-json](https://github.com/amrhassan/haskell-hedgehog-gen-json/blob/master/src/Hedgehog/Gen/JSON/Unconstrained.hs) project.
 -}
-module Generators.Aeson(genValue, genObj, genArray) where
+module Generators.Aeson(genValue, genObj, genArray, sensibleRanges) where
 
 import Data.Aeson qualified as A
 import Generators.Ranges
 import Hedgehog
 import Hedgehog.Gen qualified as Gen
+import Hedgehog.Range qualified as Range
 import Data.Scientific qualified as Scientific
 import Data.Vector qualified as Vector
 import qualified Data.Aeson.Key as A
@@ -44,3 +45,13 @@ genArray ranges = do
 genValue :: Ranges -> Gen A.Value
 genValue ranges = Gen.choice [genNull, genStringValue (ranges.stringRange), genBool, genNumber (ranges.numberRange), genArray ranges, genObj ranges]
 
+-- | Sensible ranges for arbitrary JSON values if you don't want to define them
+sensibleRanges :: Ranges
+sensibleRanges =
+  Ranges
+  { arrayRange = ArrayRange $ Range.linear 0 5
+  , stringRange = StringRange $ Range.linear 0 1000
+  , numberRange = NumberRange $ Range.linearFrac (-1000) 1000
+  , integerRange = IntegerRange $ Range.linear (-1000) 1000
+  , objectRange = ObjectRange $ Range.linear 0 5
+  }

@@ -1,4 +1,4 @@
-module MessageDb.StreamSpec (prop_parseStream) where
+module MessageDb.StreamSpec (streamProps) where
 
 import Data.Functor
 import Data.Maybe (fromMaybe)
@@ -6,7 +6,7 @@ import Data.Text (Text, findIndex, length)
 import Hedgehog
 import Hedgehog.Gen qualified as Gen
 import Hedgehog.Range qualified as Range
-import MessageDb.Stream (Stream, parse)
+import MessageDb.Stream (parse)
 import Test.Tasty
 import Test.Tasty.Hedgehog
 import Prelude hiding (length)
@@ -31,4 +31,7 @@ prop_parseStream = property $ do
   case parse streamName of
     Left _ | invalidStreamName -> pure ()
     Right _ | validStreamName -> pure ()
-    other -> annotateShow other >> fail ""
+    other -> annotateShow other >> fail "Could not parse stream name into a stream"
+
+streamProps :: TestTree
+streamProps = testGroup "Stream property tests" [testProperty "MessageDb.Stream.parse parses stream names properly" prop_parseStream]
