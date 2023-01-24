@@ -6,6 +6,7 @@ module Generator
     genStream,
     genStreamIdentifier,
     genValidStreamIdentifier,
+    genStreamCategory,
   )
 where
 
@@ -19,6 +20,8 @@ import Hedgehog.Gen qualified as Gen
 import Hedgehog.Range qualified as Range
 import MessageDb.Message
 import MessageDb.Stream
+import MessageDb.StreamCategory (StreamCategory)
+import MessageDb.StreamCategory qualified as C
 import MessageDb.StreamIdentifier (StreamIdentifier)
 import MessageDb.StreamIdentifier qualified as I
 
@@ -65,6 +68,11 @@ genStreamIdentifier :: Gen StreamIdentifier
 genStreamIdentifier = do
   i <- genValidStreamIdentifier
   pure $ I.fromText i ^?! _Right
+
+genStreamCategory :: Gen StreamCategory
+genStreamCategory = do
+  c <- genCategoryName
+  pure $ C.fromText c ^?! _Right
 
 newMessageGen :: Gen NewMessage
 newMessageGen = do

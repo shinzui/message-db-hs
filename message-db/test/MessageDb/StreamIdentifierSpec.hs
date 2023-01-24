@@ -1,4 +1,4 @@
-module MessageDb.StreamIdentifierSpec where
+module MessageDb.StreamIdentifierSpec (streamIdentifierProps) where
 
 import Generator (genStreamIdentifier)
 import Hedgehog

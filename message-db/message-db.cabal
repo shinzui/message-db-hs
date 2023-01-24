@@ -60,6 +60,7 @@ test-suite message-db-test
     MessageDb.Db.TastySetup
     MessageDb.StreamSpec
     MessageDb.StreamIdentifierSpec
+    MessageDb.StreamCategorySpec
     Internal.GeneratorSpec
 
   default-language:   GHC2021
