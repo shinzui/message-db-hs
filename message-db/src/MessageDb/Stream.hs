@@ -1,7 +1,7 @@
 module MessageDb.Stream
   ( Stream (..),
     Identifier,
-    parse,
+    fromText,
     toText,
   )
 where
@@ -25,8 +25,8 @@ data Stream = Stream
 toText :: Stream -> Text
 toText (Stream c i) = C.toText c <> "-" <> I.toText i
 
-parse :: Text -> Either Text Stream
-parse t = case split (== '-') t of
+fromText :: Text -> Either Text Stream
+fromText t = case split (== '-') t of
   [] -> Left $ "Invalid stream name: " <> t
   [_c] -> Left "Invalid stream. Streams must have a '-' to separate the stream category from the stream identifier"
   (c : i) ->

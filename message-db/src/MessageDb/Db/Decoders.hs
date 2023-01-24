@@ -22,7 +22,7 @@ messageDecoder =
     <*> D.column (D.nonNullable D.timestamptz)
 
 streamDecoder :: D.Value Stream
-streamDecoder = D.refine parse D.text
+streamDecoder = D.refine fromText D.text
 
 streamPositionDecoder :: D.Value StreamPosition
 streamPositionDecoder = StreamPosition <$> D.int8

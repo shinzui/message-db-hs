@@ -1,13 +1,12 @@
 module MessageDb.StreamSpec (streamProps) where
 
 import Control.Lens
-import Data.Functor
 import Data.Maybe (fromMaybe)
 import Data.Text (Text, findIndex, length, split)
 import Hedgehog
 import Hedgehog.Gen qualified as Gen
 import Hedgehog.Range qualified as Range
-import MessageDb.Stream (parse)
+import MessageDb.Stream (fromText)
 import Test.Tasty
 import Test.Tasty.Hedgehog
 import Prelude hiding (length)
@@ -32,7 +31,7 @@ prop_parseStream = property $ do
   cover 10 "valid stream name" validStreamName
   cover 3 "invalid stream name" invalidStreamName
   cover 1 "invalid category name in stream name" invalidCategory
-  case parse streamName of
+  case fromText streamName of
     Left _ | invalidStreamName -> pure ()
     Right _ | validStreamName -> pure ()
     Left _ | invalidCategory -> pure ()

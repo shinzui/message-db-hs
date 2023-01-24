@@ -44,7 +44,7 @@ genMessageMetadata = MessageMetadata <$> genValue sensibleRanges
 genStream :: Gen Stream
 genStream = do
   streamName <- genValidStreamName
-  pure $ parse streamName ^?! _Right
+  pure $ fromText streamName ^?! _Right
 
 newMessageGen :: Gen NewMessage
 newMessageGen = do
