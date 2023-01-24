@@ -7,6 +7,7 @@ module Generator
     genStreamIdentifier,
     genValidStreamIdentifier,
     genStreamCategory,
+    genCategoryName,
   )
 where
 
