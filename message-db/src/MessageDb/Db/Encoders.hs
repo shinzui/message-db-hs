@@ -13,6 +13,8 @@ import Data.Functor.Contravariant ((>$<))
 import Hasql.Encoders qualified as E
 import MessageDb.Message
 import MessageDb.Stream
+import MessageDb.StreamCategory (StreamCategory)
+import MessageDb.StreamCategory qualified as S
 
 newMessageEncoder :: E.Params NewMessage
 newMessageEncoder =
@@ -27,7 +29,7 @@ streamValue :: E.Value Stream
 streamValue = toText >$< E.text
 
 streamCategoryValue :: E.Value StreamCategory
-streamCategoryValue = streamCategoryToText >$< E.text
+streamCategoryValue = S.toText >$< E.text
 
 streamPositionValue :: E.Value StreamPosition
 streamPositionValue = (coerce <$> unStreamPosition) >$< E.int8

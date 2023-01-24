@@ -23,6 +23,7 @@ import MessageDb.Db.Decoders qualified as D
 import MessageDb.Db.Encoders qualified as E
 import MessageDb.Message
 import MessageDb.Stream
+import MessageDb.StreamCategory (StreamCategory)
 import Numeric.Natural (Natural)
 
 data BatchSize = Unlimited | Limit Word64

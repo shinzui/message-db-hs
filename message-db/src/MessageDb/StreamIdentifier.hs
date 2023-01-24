@@ -1,0 +1,1 @@
+module MessageDb.StreamIdentifier where

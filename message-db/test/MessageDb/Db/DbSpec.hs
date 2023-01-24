@@ -7,7 +7,8 @@ import Hasql.Pool (Pool, use)
 import MessageDb.Db.Sessions
 import MessageDb.Db.TastySetup (withPool)
 import MessageDb.Stream qualified as S
-import MessageDb.Message ( NewMessage(..), StreamPosition(..) )
+import MessageDb.Message
+    ( NewMessage(..), StreamPosition(..), represents )
 import Test.Tasty
 import Test.Tasty.HUnit
 import Generator (newMessageGen, genStream)
@@ -16,7 +17,6 @@ import MessageDb.Db.Statements
     ( GetStreamMessagesQuery(GetStreamMessagesQuery),
       GetCategoryMessagesQuery(GetCategoryMessagesQuery) )
 import Data.Vector ((!))
-import MessageDb.Message (represents)
 import Data.Functor ((<&>))
 
 getStreamMessagesTests :: Pool -> IO ()

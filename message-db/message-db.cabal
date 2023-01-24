@@ -17,6 +17,8 @@ library
     MessageDb.Db.Transactions
     MessageDb.Message
     MessageDb.Stream
+    MessageDb.StreamIdentifier
+    MessageDb.StreamCategory
 
   hs-source-dirs:     src
   default-language:   GHC2021
