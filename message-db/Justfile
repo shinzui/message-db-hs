@@ -1,7 +1,7 @@
 set fallback
 
 test:
- cabal test --test-show-details=streaming
+ cabal test --test-show-details=direct
 
 test-filtered pattern:
- cabal test --test-show-details=streaming --test-options="--pattern {{pattern}}"
+ cabal test --test-show-details=direct --test-options="--pattern {{pattern}}"
