@@ -3,10 +3,11 @@ module MessageDb.StreamSpec (streamProps) where
 import Control.Lens
 import Data.Maybe (fromMaybe)
 import Data.Text (Text, findIndex, length, split)
+import Generator (genStream)
 import Hedgehog
 import Hedgehog.Gen qualified as Gen
 import Hedgehog.Range qualified as Range
-import MessageDb.Stream (fromText)
+import MessageDb.Stream (fromText, toText)
 import Test.Tasty
 import Test.Tasty.Hedgehog
 import Prelude hiding (length)
@@ -37,5 +38,15 @@ prop_parseStream = property $ do
     Left _ | invalidCategory -> pure ()
     other -> annotateShow other >> fail "Could not parse stream name into a stream"
 
+prop_fromToText :: Property
+prop_fromToText = property $ do
+  s <- forAll genStream
+  tripping s toText fromText
+
 streamProps :: TestTree
-streamProps = testGroup "Stream property tests" [testProperty "MessageDb.Stream.parse parses stream names properly" prop_parseStream]
+streamProps =
+  testGroup
+    "Stream property tests"
+    [ testProperty "MessageDb.Stream.fromText parses stream names properly" prop_parseStream,
+      testProperty "MessageDb.Stream tripping toText/fromText" prop_fromToText
+    ]

@@ -1,6 +1,5 @@
 module MessageDb.Stream
   ( Stream (..),
-    Identifier,
     fromText,
     toText,
   )
@@ -11,10 +10,6 @@ import Data.Text (Text, intercalate, split)
 import GHC.Generics (Generic)
 import MessageDb.StreamCategory qualified as C
 import MessageDb.StreamIdentifier qualified as I
-
-newtype Identifier = Identifier {unIdentifier :: Text}
-  deriving newtype (Eq)
-  deriving stock (Ord, Show, Generic)
 
 data Stream = Stream
   { category :: !C.StreamCategory,
