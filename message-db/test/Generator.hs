@@ -1,9 +1,16 @@
 {-# LANGUAGE RecordWildCards #-}
 
-module Generator (newMessageGen, genValidStreamName, genStream) where
+module Generator
+  ( newMessageGen,
+    genValidStreamName,
+    genStream,
+    genStreamIdentifier,
+    genValidStreamIdentifier,
+  )
+where
 
 import Control.Lens
-import Data.Text (Text)
+import Data.Text (Text, pack)
 import Data.UUID qualified as UUID
 import Generators.Aeson (genValue, sensibleRanges)
 import Generators.UUID (genUUID)
@@ -12,6 +19,8 @@ import Hedgehog.Gen qualified as Gen
 import Hedgehog.Range qualified as Range
 import MessageDb.Message
 import MessageDb.Stream
+import MessageDb.StreamIdentifier (StreamIdentifier)
+import MessageDb.StreamIdentifier qualified as I
 
 genCategoryName :: Gen Text
 genCategoryName =
@@ -23,11 +32,17 @@ genCategoryName =
           (1, pure ':')
         ]
 
+genValidStreamIdentifier :: Gen Text
+genValidStreamIdentifier = Gen.choice [genUUIDText, genNaturalText]
+  where
+    genUUIDText = genUUID <&> UUID.toText
+    genNaturalText = Gen.word32 Range.linearBounded <&> pack . show
+
 genValidStreamName :: Gen Text
 genValidStreamName = do
   category <- genCategoryName
-  identifier <- genUUID
-  pure $ category <> "-" <> UUID.toText identifier
+  identifier <- genValidStreamIdentifier
+  pure $ category <> "-" <> identifier
 
 genMessageId :: Gen MessageId
 genMessageId = MessageId <$> genUUID
@@ -45,6 +60,11 @@ genStream :: Gen Stream
 genStream = do
   streamName <- genValidStreamName
   pure $ fromText streamName ^?! _Right
+
+genStreamIdentifier :: Gen StreamIdentifier
+genStreamIdentifier = do
+  i <- genValidStreamIdentifier
+  pure $ I.fromText i ^?! _Right
 
 newMessageGen :: Gen NewMessage
 newMessageGen = do
