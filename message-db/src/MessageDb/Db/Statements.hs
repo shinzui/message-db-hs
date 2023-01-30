@@ -6,6 +6,7 @@ module MessageDb.Db.Statements
     getStreamVersion,
     GetStreamMessagesQuery (..),
     GetCategoryMessagesQuery (..),
+    BatchSize (..),
   )
 where
 
