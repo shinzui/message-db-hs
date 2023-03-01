@@ -35,8 +35,8 @@
             pkgs.xz
             pkgs.just
             pkgs.cabal-install
-            pkgs.haskell.packages.ghc943.haskell-language-server
-            pkgs.haskell.compiler.ghc943
+            pkgs.haskell.packages.ghc944.haskell-language-server
+            pkgs.haskell.compiler.ghc944
           ];
         };
       }
