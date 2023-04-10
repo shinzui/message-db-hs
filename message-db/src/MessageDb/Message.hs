@@ -8,15 +8,17 @@ module MessageDb.Message
     StreamPosition (..),
     GlobalPosition (..),
     represents,
+    toMessageType,
   )
 where
 
 import Control.Lens
 import Data.Aeson (Value)
+import Data.Data (Data (toConstr))
 import Data.Generics.Labels ()
 import Data.Int (Int64)
 import Data.Maybe (isNothing)
-import Data.Text (Text)
+import Data.Text (Text, pack)
 import Data.Time (UTCTime)
 import Data.UUID (UUID)
 import GHC.Generics (Generic)
@@ -92,3 +94,6 @@ represents msg newMsg =
     && newMsg ^. #messageData == msg ^. #messageData
     && newMsg ^. #messageMetadata == msg ^. #messageMetadata
     && (isNothing (newMsg ^. #expectedPosition) || (newMsg ^. #expectedPosition ^? _Just == Just (msg ^. #position)))
+
+toMessageType :: forall a. Data a => a -> MessageType
+toMessageType a = MessageType $ pack . show $ toConstr a
