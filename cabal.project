@@ -2,4 +2,7 @@ packages:
   message-db
   message-db-migration
 
+package message-db
+  tests: True
+
 test-show-details: direct
