@@ -9,6 +9,7 @@ module MessageDb.Message
     GlobalPosition (..),
     represents,
     toMessageType,
+    proxyToMessageType,
   )
 where
 
@@ -18,11 +19,14 @@ import Data.Data (Data (toConstr))
 import Data.Generics.Labels ()
 import Data.Int (Int64)
 import Data.Maybe (isNothing)
+import Data.Proxy (Proxy)
 import Data.Text (Text, pack)
 import Data.Time (UTCTime)
+import Data.Typeable (Typeable)
 import Data.UUID (UUID)
 import GHC.Generics (Generic)
 import MessageDb.Stream (Stream)
+import Type.Reflection (tyConName, typeRep, typeRepTyCon)
 
 newtype MessageId = MessageId {unMessageId :: UUID}
   deriving newtype (Eq, Ord)
@@ -97,3 +101,6 @@ represents msg newMsg =
 
 toMessageType :: forall a. Data a => a -> MessageType
 toMessageType a = MessageType $ pack . show $ toConstr a
+
+proxyToMessageType :: forall a. Typeable a => Proxy a -> MessageType
+proxyToMessageType _ = MessageType . pack . tyConName . typeRepTyCon $ (typeRep @a)
