@@ -6,3 +6,8 @@ package message-db
   tests: True
 
 test-show-details: direct
+
+source-repository-package
+  type: git
+  location: https://github.com/shinzui/tmp-postgres
+  tag: d1fa47e9135c7e2e0f43ea9f31459f3fb00bef77
