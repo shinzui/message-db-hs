@@ -18,9 +18,9 @@ import Data.Aeson (Value)
 import Data.Data (Data (toConstr))
 import Data.Generics.Labels ()
 import Data.Int (Int64)
-import Data.Maybe (isNothing)
+import Data.Maybe (fromMaybe, isNothing)
 import Data.Proxy (Proxy)
-import Data.Text (Text, pack)
+import Data.Text (Text, pack, stripPrefix)
 import Data.Time (UTCTime)
 import Data.Typeable (Typeable)
 import Data.UUID (UUID)
@@ -103,4 +103,6 @@ toMessageType :: forall a. Data a => a -> MessageType
 toMessageType a = MessageType $ pack . show $ toConstr a
 
 proxyToMessageType :: forall a. Typeable a => Proxy a -> MessageType
-proxyToMessageType _ = MessageType . pack . tyConName . typeRepTyCon $ (typeRep @a)
+proxyToMessageType _ = MessageType $ fromMaybe s (stripPrefix "'" s)
+  where
+    s = pack . tyConName . typeRepTyCon $ (typeRep @a)
